@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class PayrollMain {
+public class PayrollMain<PayrollDetails> {
 	Scanner SC = new Scanner(System.in);
 
-    public enum Ioservice {CONSALE_IO, FILE_IO, DB_IO, REST_IO}
+    public enum IOService {CONSALE_IO, FILE_IO, DB_IO, REST_IO, ioType}
 
     private List<PayrollDetails> employeePayrollList;
 
     public PayrollMain() {
-        this.employeePayrollList = new ArrayList<PayrollDetails>();
+        this.employeePayrollList = new employeePayrollList();
     }
 
     public PayrollMain(List<PayrollDetails> employeePayrollList) {
@@ -20,14 +20,14 @@ public class PayrollMain {
     }
 
     public static void main(String[] args) {
-        ArrayList<PayrollDetails> employeePayrollList = new ArrayList<PayrollDetails>();
+        ArrayList<PayrollDetails> employeePayrollList = new ArrayList<>();
         PayrollMain employeePayrollService = new PayrollMain(employeePayrollList);
         Scanner consoleInputReader = new Scanner(System.in);
-        employeePayrollService.readPayrollData(consoleInputReader);
-        employeePayrollService.writePayrollData();
+        employeePayrollService.readEmployeePayrollData(consoleInputReader);
+        employeePayrollService.writeEmployeePayrollData(IOService.ioType);
     }
 
-    public void readPayrollData(Scanner consoleInputReader) {
+    public void readEmployeePayrollData(Scanner consoleInputReader) {
         System.out.println("Enter Employee Id:");
         int employeeId = consoleInputReader.nextInt();
         System.out.println("Enter Employee Name:");
@@ -37,8 +37,19 @@ public class PayrollMain {
         employeePayrollList.add(new PayrollDetails(employeeId, employeeName, employeeSalary));
     }
 
-    public void writePayrollData() {
-        System.out.println("\nWriting Employee Payroll Roaster to Cansole\n" + employeePayrollList);
+    public void writeEmployeePayrollData(IOService ioType) {
+        if (ioType.equals(IOService.CONSALE_IO)) {
+            for (PayrollDetails o : employeePayrollList)
+                System.out.println(o.toString());
+        } else if (ioType.equals(IOService.FILE_IO)) {
+            new EmpIOService().writeData(employeePayrollList);
+        }
+    }
+
+    public long countEnteries(IOService ioType) {
+        if (ioType.equals(IOService.FILE_IO))
+            return new EmpIOService().countEntries();
+        return 0;
     }
 }
 
