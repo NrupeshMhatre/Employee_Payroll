@@ -8,7 +8,7 @@ import java.util.List;
 public class EmpIOService {
 	public static final String PAYROLL_FILE_NAME = "employee-payroll-file.txt";
 
-    public void writeData(List<PayrollDetails> employeeList) {
+    public <EmployeePayrollData> void writeData(List<EmployeePayrollData> employeeList) {
 
         StringBuffer employeeBufferString = new StringBuffer();
         employeeList.forEach(employee -> {
@@ -30,5 +30,12 @@ public class EmpIOService {
         } catch (IOException e) {
         }
         return countOfEntries;
+    }
+
+    public void printEmployeePayrolls() {
+        try {
+            Files.lines(Paths.get(PAYROLL_FILE_NAME)).forEach(System.out::println);
+        } catch (IOException e) {
+        }
     }
 }
