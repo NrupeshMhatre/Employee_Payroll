@@ -39,5 +39,4 @@ public class PayrollDetails {
     public String toString() {
         return "Id : " + employeeId + "\t" + "Name : " + employeeName + "\t" + "Salary : " + salary;
     }
-
 }
